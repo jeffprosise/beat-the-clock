@@ -1,0 +1,408 @@
+:root {
+    --bg: #10141a;
+    --panel: #161b22;
+    --panel-alt: #1a2230;
+    --border: #262d38;
+    --text: #e6e9ef;
+    --text-dim: #8b93a1;
+    --text-faint: #5b6472;
+
+    --accent: #f2a93b;       /* incident-signal amber — the one accent color */
+    --accent-dim: #7a5a1f;
+
+    --level-error: #ef6b5f;
+    --level-warn: #f2a93b;
+    --level-info: #6fa8dc;
+    --level-debug: #5b6472;
+
+    --user-bubble: #223047;
+    --assistant-bubble: #1a2230;
+
+    --font-ui: -apple-system, "Segoe UI", "Inter", Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    height: 100%;
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+}
+
+.app {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+/* ---------- shared pane chrome ---------- */
+
+.pane-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+    flex-shrink: 0;
+}
+
+.pane-header h1 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin: 0;
+    color: var(--text);
+}
+
+.pane-subtitle {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+}
+
+/* ---------- log pane (left, majority of the page) ---------- */
+
+.log-pane {
+    flex: 1 1 68%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border);
+    background: var(--bg);
+    position: relative;
+}
+
+.log-pane .pane-header h1 {
+    font-family: var(--font-mono);
+}
+
+.log-content {
+    flex: 1;
+    margin: 0;
+    padding: 1rem 1.4rem;
+    overflow-y: auto;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.55;
+    white-space: pre;
+    color: var(--text-dim);
+}
+
+.log-content .lvl-ERROR { color: var(--level-error); font-weight: 600; }
+.log-content .lvl-WARN  { color: var(--level-warn); }
+.log-content .lvl-INFO  { color: var(--level-info); }
+.log-content .lvl-DEBUG { color: var(--level-debug); }
+
+/* ---------- chat pane (right, triage assistant) ---------- */
+
+.chat-pane {
+    flex: 0 0 32%;
+    max-width: 480px;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.message {
+    display: flex;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.message-bubble {
+    max-width: 88%;
+    padding: 0.55rem 0.8rem;
+    border-radius: 10px;
+    font-size: 0.86rem;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.message.user .message-bubble {
+    white-space: pre-wrap;
+}
+
+.message.assistant .message-bubble {
+    background: var(--assistant-bubble);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-bottom-left-radius: 3px;
+}
+
+.message.user .message-bubble {
+    background: var(--user-bubble);
+    color: var(--text);
+    border-bottom-right-radius: 3px;
+}
+
+.message-bubble em {
+    color: var(--accent);
+    font-style: normal;
+}
+
+/* ---------- markdown rendering inside assistant bubbles ---------- */
+
+.message-bubble p {
+    margin: 0 0 0.5em 0;
+}
+.message-bubble p:last-child {
+    margin-bottom: 0;
+}
+
+.message-bubble ul,
+.message-bubble ol {
+    margin: 0.3em 0 0.6em 0;
+    padding-left: 1.3em;
+}
+
+.message-bubble li {
+    margin-bottom: 0.2em;
+}
+
+.message-bubble strong {
+    color: var(--text);
+    font-weight: 700;
+}
+
+.message-bubble a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.message-bubble code {
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+}
+
+.message-bubble pre {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6em 0.7em;
+    overflow-x: auto;
+    margin: 0.4em 0 0.6em 0;
+}
+
+.message-bubble pre code {
+    background: none;
+    padding: 0;
+    font-size: 0.8em;
+    line-height: 1.5;
+}
+
+.message-bubble blockquote {
+    margin: 0.4em 0 0.6em 0;
+    padding-left: 0.7em;
+    border-left: 2px solid var(--accent-dim);
+    color: var(--text-dim);
+}
+
+.message-bubble h1,
+.message-bubble h2,
+.message-bubble h3,
+.message-bubble h4 {
+    margin: 0.5em 0 0.3em 0;
+    font-size: 1em;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.message-bubble hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0.6em 0;
+}
+
+.message-bubble table {
+    border-collapse: collapse;
+    margin: 0.4em 0 0.6em 0;
+    font-size: 0.85em;
+}
+
+.message-bubble th,
+.message-bubble td {
+    border: 1px solid var(--border);
+    padding: 0.3em 0.55em;
+    text-align: left;
+}
+
+.message.assistant .message-bubble.pending::after {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-left: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 1s infinite ease-in-out;
+    vertical-align: middle;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 1; }
+}
+
+.chat-form {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    border-top: 1px solid var(--border);
+    background: var(--panel);
+    flex-shrink: 0;
+}
+
+.chat-input {
+    flex: 1;
+    resize: none;
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: 0.86rem;
+    padding: 0.55rem 0.7rem;
+    line-height: 1.4;
+}
+
+.chat-input:focus {
+    outline: 2px solid var(--accent-dim);
+    outline-offset: 1px;
+    border-color: var(--accent-dim);
+}
+
+.chat-send {
+    background: var(--accent);
+    color: #1a1206;
+    border: none;
+    border-radius: 8px;
+    padding: 0 1.1rem;
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+}
+
+.chat-send:hover:not(:disabled) {
+    filter: brightness(1.08);
+}
+
+.chat-send:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* ---------- responsiveness ---------- */
+
+@media (max-width: 860px) {
+    .app {
+        flex-direction: column;
+    }
+    .log-pane {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        flex: 1 1 55%;
+    }
+    .chat-pane {
+        flex: 1 1 45%;
+        max-width: none;
+        min-width: 0;
+    }
+}
+
+/* ---------- scrollbars (webkit) ---------- */
+
+.log-content::-webkit-scrollbar,
+.chat-messages::-webkit-scrollbar {
+    width: 10px;
+}
+.log-content::-webkit-scrollbar-thumb,
+.chat-messages::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 6px;
+}
+
+/* ---------- travel demo overview ---------- */
+.travel-overview {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem clamp(1.5rem, 5vw, 4rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+}
+
+.travel-card {
+    width: min(680px, 100%);
+    padding: 1rem 1.15rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.travel-card h2 {
+    margin: 0.1rem 0 0.35rem;
+    font-size: 1rem;
+}
+
+.travel-card p {
+    margin: 0;
+    color: var(--text-dim);
+    line-height: 1.5;
+    font-size: 0.86rem;
+}
+
+.travel-card code {
+    color: var(--accent);
+    font-family: var(--font-mono);
+}
+
+.travel-kicker {
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+}
+
+.workflow-arrow {
+    color: var(--text-faint);
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.demo-prompts {
+    width: min(680px, 100%);
+    margin-top: 0.9rem;
+    padding: 0.9rem 1rem;
+    border-left: 3px solid var(--accent-dim);
+    color: var(--text-dim);
+    font-size: 0.84rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.demo-prompts strong { color: var(--text); }

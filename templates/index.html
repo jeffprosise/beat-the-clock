@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+    <div class="app">
+        <section class="log-pane">
+            <header class="pane-header">
+                <h1>Travel Assistant</h1>
+                <span class="pane-subtitle">Outlook + skills</span>
+            </header>
+
+            <div id="travel-overview" class="travel-overview">
+                <div class="travel-card">
+                    <div class="travel-kicker">TOOLS</div>
+                    <h2>Outlook access</h2>
+                    <p><code>list_outlook_folder()</code> lists lightweight message metadata with short numeric IDs.<br><code>get_outlook_messages()</code> retrieves selected bodies by those IDs in batches of up to 25.</p>
+                </div>
+                <div class="workflow-arrow">&darr;</div>
+                <div class="travel-card">
+                    <div class="travel-kicker">SKILL 1</div>
+                    <h2>Outlook e-mail reader</h2>
+                    <p>Separates bookings from noise and recognizes revisions, cancellations, and superseded confirmations.</p>
+                </div>
+                <div class="workflow-arrow">&darr;</div>
+                <div class="travel-card">
+                    <div class="travel-kicker">SKILL 2</div>
+                    <h2>Itinerary builder</h2>
+                    <p>Turns the travel facts into a chronological plan covering flights, hotels, transfers, excursions, and free time.</p>
+                </div>
+                <div class="workflow-arrow">&darr;</div>
+                <div class="travel-card">
+                    <div class="travel-kicker">SKILL 3</div>
+                    <h2>Visa &amp; entry requirements</h2>
+                    <p>Uses live Web search to research current visa, authorization, arrival-form, transit, and passport requirements for a U.S. citizen.</p>
+                </div>
+                <div class="workflow-arrow">&darr;</div>
+                <div class="travel-card">
+                    <div class="travel-kicker">SKILL 4</div>
+                    <h2>Itinerary publisher</h2>
+                    <p>Creates an editable Word itinerary with date bands and color-coded transportation, activities, and lodging.</p>
+                </div>
+                <div class="demo-prompts">
+                    <strong>Try:</strong>
+                    <span>“Read the e-mails in Travel/Asia 2026 and build my itinerary.”</span>
+                    <span>“What visas or entry authorizations do I need?”</span>
+                    <span>“Now turn it into a Word document.”</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="chat-pane">
+            <header class="pane-header">
+                <h1>Travel Assistant</h1>
+            </header>
+
+            <div id="chat-messages" class="chat-messages">
+                <div class="message assistant">
+                    <div class="message-bubble">Tell me which Outlook folder contains your trip correspondence. For example: <em>“Read Travel/Asia 2026 and build my itinerary.”</em></div>
+                </div>
+            </div>
+
+            <form id="chat-form" class="chat-form">
+                <textarea id="chat-input" class="chat-input" placeholder="Ask about your trip&hellip;" rows="2"></textarea>
+                <button id="chat-send" type="submit" class="chat-send">Send</button>
+            </form>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
